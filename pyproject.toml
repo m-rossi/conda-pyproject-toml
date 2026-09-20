@@ -1,0 +1,72 @@
+[build-system]
+requires = [
+  "hatch-vcs",
+  "hatchling >= 1.26",
+]
+build-backend = "hatchling.build"
+
+[project]
+name = "conda-pyproject-toml"
+description = "Conda plugin that installs dependencies from a pyproject.toml file."
+authors = [
+  {name = "Marco Rossi", email = "developer@marco-rossi.com"},
+]
+dynamic = ["version"]
+readme = "README.md"
+license = "MIT"
+keywords = [
+  "conda",
+  "plugin",
+  "pyproject.toml",
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Plugins",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3",
+  "Topic :: Software Development :: Build Tools",
+]
+requires-python = ">=3.12"
+dependencies = [
+  "conda>=26.7.2",
+  "grayskull>=3.1.1",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest-cov",
+  "pytest",
+]
+
+[project.urls]
+source = "https://github.com/m-rossi/conda-pyproject-toml"
+issues = "https://github.com/m-rossi/conda-pyproject-toml/issues"
+
+[tool.coverage.run]
+omit = [
+  "src/conda_pyproject_toml/tests/*",
+]
+
+[project.entry-points."conda"]
+conda-pyproject-toml = "conda_pyproject_toml"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.pytest]
+minversion = "9.0"
+addopts = [
+  "--cov=conda_pyproject_toml",
+]
+
+[tool.ruff]
+line-length = 99
+target-version = "py312"
+
+[tool.ruff.format]
+quote-style = "single"

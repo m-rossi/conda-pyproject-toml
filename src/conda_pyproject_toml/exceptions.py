@@ -1,0 +1,2 @@
+class SolverWarning(Warning):
+    pass
