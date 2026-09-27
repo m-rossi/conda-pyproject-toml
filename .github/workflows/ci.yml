@@ -31,4 +31,5 @@ jobs:
           environment-file: environment.yml
           miniforge-version: latest
           python-version: ${{ matrix.python-version }}
-      - run: pytest .
+      - run: pytest . -o junit_family=legacy
+      - uses: codecov/codecov-action@v5
