@@ -2,6 +2,7 @@
 
 [![PyPI Version](https://img.shields.io/pypi/v/conda-pyproject-toml)](https://pypi.org/project/conda-pyproject-toml/)
 [![Conda Version](https://img.shields.io/conda/vn/conda-forge/conda-pyproject-toml)](https://anaconda.org/conda-forge/conda-pyproject-toml)
+[![CI](https://github.com/m-rossi/conda-pyproject-toml/actions/workflows/ci.yml/badge.svg)](https://github.com/m-rossi/conda-pyproject-toml/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/m-rossi/conda-pyproject-toml/graph/badge.svg?token=OE89B67Y8N)](https://codecov.io/gh/m-rossi/conda-pyproject-toml)
 
 [Conda](https://docs.conda.io) plugin that installs dependencies from a pyproject.toml file.
