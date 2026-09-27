@@ -62,6 +62,7 @@ source = "vcs"
 minversion = "9.0"
 addopts = [
   "--cov=conda_pyproject_toml",
+  "--cov-report=xml",
   "--junitxml=junit.xml",
 ]
 
