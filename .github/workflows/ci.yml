@@ -34,3 +34,5 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - run: pytest . -o junit_family=legacy
       - uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
