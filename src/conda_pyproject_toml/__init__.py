@@ -72,7 +72,7 @@ class PyProjectTomlSpec(EnvironmentSpecBase):
                     if solver != 'rattler':
                         warnings.warn(
                             'Environment marker regarding Python version for requirement '
-                            '"{requirement}" found. These markers are not yet supported in all '
+                            f'"{requirement}" found. These markers are not yet supported in all '
                             'solvers, so this requirement may be installed although not required.'
                             ' See https://github.com/conda/conda/issues/16073 for progress of '
                             'this feature.',
