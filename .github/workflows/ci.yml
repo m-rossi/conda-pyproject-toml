@@ -1,0 +1,13 @@
+name: "CI"
+
+on: [push]
+
+jobs:
+  ruff-check:
+    name: ruff-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/ruff-action@v4
+        with:
+          args: "check"
