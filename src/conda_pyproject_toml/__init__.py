@@ -16,8 +16,6 @@ from .exceptions import SolverWarning
 
 
 class PyProjectTomlSpec(EnvironmentSpecBase):
-    extensions = {'.toml'}
-
     def __init__(self, filename: str):
         self.filename = filename
 
@@ -32,10 +30,7 @@ class PyProjectTomlSpec(EnvironmentSpecBase):
         """
         if self.filename is None or not Path(self.filename).exists():
             raise FileNotFoundError
-        if Path(self.filename).name == 'pyproject.toml':
-            return True
-        else:
-            return False
+        return Path(self.filename).name == 'pyproject.toml'
 
     def parse_requirement(self, requirement: str, solver: str) -> MatchSpec | None:
         """Parses a requirement string and returns a MatchSpec object if applicable.
@@ -77,7 +72,7 @@ class PyProjectTomlSpec(EnvironmentSpecBase):
                     if solver != 'rattler':
                         warnings.warn(
                             'Environment marker regarding Python version for requirement '
-                            '"{requirement}" found. These markers are not yet supported in all '
+                            f'"{requirement}" found. These markers are not yet supported in all '
                             'solvers, so this requirement may be installed although not required.'
                             ' See https://github.com/conda/conda/issues/16073 for progress of '
                             'this feature.',
@@ -102,11 +97,9 @@ class PyProjectTomlSpec(EnvironmentSpecBase):
         metadata = get_all_toml_info(self.filename)
         requirements = []
         for section in ['host', 'run']:
-            for requirement in metadata['requirements'][section]:
-                requirements.append(requirement)
+            requirements += metadata['requirements'][section]
         for extra in metadata['requirements']['extra']:
-            for requirement in metadata['requirements']['extra'][extra]:
-                requirements.append(requirement)
+            requirements += metadata['requirements']['extra'][extra]
         requested_packages = []
         for requirement in requirements:
             if (parsed_requirement := self.parse_requirement(requirement, solver=context.solver)):

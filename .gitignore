@@ -1,4 +1,6 @@
 .coverage
 .vscode/
 *.pyc
+coverage.xml
 dist/*
+junit.xml
