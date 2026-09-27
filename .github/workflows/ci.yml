@@ -11,3 +11,21 @@ jobs:
       - uses: astral-sh/ruff-action@v4.1.0
         with:
           args: "check"
+
+  pytest:
+    name: pytest
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["ubuntu-latest", "macos-latest", "windows-latest"]
+        python-version: ["3.12", "3.13", "3.14"]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: conda-incubator/setup-miniconda@v4
+        with:
+          auto-update-conda: true
+          environment-file: environment.yml
+          miniforge-version: latest
+          python-version: ${{ matrix.python-version }}
+      - run: pytest .

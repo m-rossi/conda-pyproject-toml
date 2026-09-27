@@ -1,0 +1,7 @@
+channels:
+  - conda-forge
+dependencies:
+  - conda
+  - grayskull
+  - pytest
+  - pytest-cov
