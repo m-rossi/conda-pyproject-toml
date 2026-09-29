@@ -38,13 +38,13 @@ def test_can_handle_valid_pyproject(pyproject_file: Path):
 
 def test_can_handle_invalid_pyproject(tmp_path: Path):
     with open(file := tmp_path / 'setup.py', 'w') as f:
-        f.write("invalid content")
+        f.write('invalid content')
     spec = PyProjectTomlSpec(str(file))
     assert spec.can_handle() is False
 
 
 def test_can_handle_missing_file(tmp_path: Path):
-    spec = PyProjectTomlSpec(str(tmp_path / "does-not-exist.toml"))
+    spec = PyProjectTomlSpec(str(tmp_path / 'does-not-exist.toml'))
     with pytest.raises(FileNotFoundError):
         spec.can_handle()
 
@@ -53,11 +53,11 @@ def test_env_includes_python_and_dependencies(pyproject_file: Path):
     spec = PyProjectTomlSpec(str(pyproject_file))
     env = spec.env
     names = {pkg.name for pkg in env.requested_packages}
-    assert "python" in names
-    assert "numpy" in names
-    assert "requests" in names
-    assert "pytest" in names
+    assert 'python' in names
+    assert 'numpy' in names
+    assert 'requests' in names
+    assert 'pytest' in names
     if sys.platform == 'win32':
-        assert "pywin32" in names
+        assert 'pywin32' in names
     if sys.platform == 'darwin':
-        assert "mlx" in names
+        assert 'mlx' in names
