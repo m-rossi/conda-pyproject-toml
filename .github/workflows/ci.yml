@@ -24,13 +24,11 @@ jobs:
       matrix:
         os: ["ubuntu-latest", "macos-latest", "windows-latest"]
         python-version: ["3.12", "3.13", "3.14"]
-        solver: ["libmamba", "rattler"]
     steps:
       - uses: actions/checkout@v7
       - uses: conda-incubator/setup-miniconda@v4
         with:
           auto-update-conda: true
-          conda-solver: ${{ matrix.solver }}
           environment-file: environment.yml
           miniforge-version: latest
           python-version: ${{ matrix.python-version }}

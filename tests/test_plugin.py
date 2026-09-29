@@ -7,6 +7,8 @@ from conda.testing.fixtures import CondaCLIFixture
 from conda.testing.integration import package_is_installed
 
 from conda_pyproject_toml import PyProjectTomlSpec
+from conda_pyproject_toml.exceptions import SolverWarning
+
 
 PYPROJECT_CONTENT = """
 [project]
@@ -70,19 +72,28 @@ def test_env_includes_python_and_dependencies(pyproject_file: Path):
         assert 'mlx' not in names
 
 
+@pytest.mark.parametrize("solver", ["classic", "libmamba", "rattler"])
 def test_cli(
     conda_cli: CondaCLIFixture,
     tmp_envs_dir: Path,
     pyproject_file: Path,
+    solver: str,
 ):
     env_name = uuid4().hex[:8]
     prefix = tmp_envs_dir / env_name
 
-    conda_cli(
-        *('env', 'create'),
-        *('--name', env_name),
-        *('--file', str(pyproject_file)),
+    conda_args = (
+        'env',
+        'create',
+        '--name', env_name,
+        '--file', str(pyproject_file),
+        '--solver', solver,
     )
+    if solver == 'rattler':
+        conda_cli(*conda_args)
+    else:
+        with pytest.warns(SolverWarning):
+            conda_cli(*conda_args)
     assert prefix.exists()
     assert package_is_installed(prefix, 'python')
     assert package_is_installed(prefix, 'numpy')
