@@ -34,6 +34,7 @@ jobs:
           environment-file: environment.yml
           miniforge-version: latest
           python-version: ${{ matrix.python-version }}
+      - run: pip install --no-deps -e .
       - run: pytest .
       - uses: codecov/codecov-action@v7
         with:
