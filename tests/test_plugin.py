@@ -3,15 +3,10 @@ from pathlib import Path
 from uuid import uuid4
 
 import pytest
-from conda.testing.fixtures import (
-    conda_cli,
-    CondaCLIFixture,
-    path_factory,
-    tmp_envs_dir,
-)
+from conda.testing.fixtures import CondaCLIFixture
 from conda.testing.integration import package_is_installed
 
-from .. import PyProjectTomlSpec
+from conda_pyproject_toml import PyProjectTomlSpec
 
 PYPROJECT_CONTENT = """
 [project]

@@ -49,7 +49,7 @@ issues = "https://github.com/m-rossi/conda-pyproject-toml/issues"
 
 [tool.coverage.run]
 omit = [
-  "src/conda_pyproject_toml/tests/*",
+  "tests/*",
 ]
 
 [project.entry-points."conda"]
