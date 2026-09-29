@@ -1,7 +1,15 @@
 import sys
 from pathlib import Path
+from uuid import uuid4
 
 import pytest
+from conda.testing.fixtures import (
+    conda_cli,
+    CondaCLIFixture,
+    path_factory,
+    tmp_envs_dir,
+)
+from conda.testing.integration import package_is_installed
 
 from .. import PyProjectTomlSpec
 
@@ -61,3 +69,27 @@ def test_env_includes_python_and_dependencies(pyproject_file: Path):
         assert 'pywin32' in names
     if sys.platform == 'darwin':
         assert 'mlx' in names
+
+
+def test_cli(
+    conda_cli: CondaCLIFixture,
+    tmp_envs_dir: Path,
+    pyproject_file: Path,
+):
+    env_name = uuid4().hex[:8]
+    prefix = tmp_envs_dir / env_name
+
+    conda_cli(
+        *('env', 'create'),
+        *('--name', env_name),
+        *('--file', str(pyproject_file)),
+    )
+    assert prefix.exists()
+    assert package_is_installed(prefix, 'python')
+    assert package_is_installed(prefix, 'numpy')
+    assert package_is_installed(prefix, 'requests')
+    assert package_is_installed(prefix, 'pytest')
+    if sys.platform == 'win32':
+        assert package_is_installed(prefix, 'pywin32')
+    if sys.platform == 'darwin':
+        assert package_is_installed(prefix, 'mlx')
