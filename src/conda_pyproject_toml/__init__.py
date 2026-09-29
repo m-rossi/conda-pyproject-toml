@@ -114,7 +114,8 @@ class PyProjectTomlSpec(EnvironmentSpecBase):
 @plugins.hookimpl
 def conda_environment_specifiers():
     yield plugins.CondaEnvironmentSpecifier(
-        name='pyproject-toml',
+        name='pyproject.toml',
         environment_spec=PyProjectTomlSpec,
-        aliases=('pyproject', 'toml'),
+        default_filenames=('pyproject.toml',),
+        description='Configuration file used by packaging tools',
     )
