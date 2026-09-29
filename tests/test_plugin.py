@@ -62,8 +62,12 @@ def test_env_includes_python_and_dependencies(pyproject_file: Path):
     assert 'pytest' in names
     if sys.platform == 'win32':
         assert 'pywin32' in names
+    else:
+        assert 'pywin32' not in names
     if sys.platform == 'darwin':
         assert 'mlx' in names
+    else:
+        assert 'mlx' not in names
 
 
 def test_cli(
@@ -86,5 +90,9 @@ def test_cli(
     assert package_is_installed(prefix, 'pytest')
     if sys.platform == 'win32':
         assert package_is_installed(prefix, 'pywin32')
+    else:
+        assert not package_is_installed(prefix, 'pywin32')
     if sys.platform == 'darwin':
         assert package_is_installed(prefix, 'mlx')
+    else:
+        assert not package_is_installed(prefix, 'mlx')
