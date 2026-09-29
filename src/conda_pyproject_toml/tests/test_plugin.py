@@ -14,7 +14,7 @@ dependencies = [
   "requests==2.31.0",
   "tomli>=2.4.1; python_version < '3.11'",
   "pywin32>=312; sys_platform == 'win32'",
-  "some-osx-package>=1.0; sys_platform == 'darwin'",
+  "mlx>=0.32; sys_platform == 'darwin'",
 ]
 
 [project.optional-dependencies]
@@ -60,4 +60,4 @@ def test_env_includes_python_and_dependencies(pyproject_file: Path):
     if sys.platform == 'win32':
         assert "pywin32" in names
     if sys.platform == 'darwin':
-        assert "some-osx-package" in names
+        assert "mlx" in names
