@@ -9,7 +9,6 @@ from conda.testing.integration import package_is_installed
 from conda_pyproject_toml import PyProjectTomlSpec
 from conda_pyproject_toml.exceptions import SolverWarning
 
-
 PYPROJECT_CONTENT = """
 [project]
 name = "example-project"
