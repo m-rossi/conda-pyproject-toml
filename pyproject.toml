@@ -40,6 +40,7 @@ dependencies = [
 [project.optional-dependencies]
 test = [
   "pytest-cov",
+  "pytest-mock",
   "pytest",
 ]
 
@@ -49,7 +50,7 @@ issues = "https://github.com/m-rossi/conda-pyproject-toml/issues"
 
 [tool.coverage.run]
 omit = [
-  "src/conda_pyproject_toml/tests/*",
+  "tests/*",
 ]
 
 [project.entry-points."conda"]

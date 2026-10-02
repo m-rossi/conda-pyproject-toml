@@ -5,3 +5,4 @@ dependencies:
   - grayskull
   - pytest
   - pytest-cov
+  - pytest-mock
