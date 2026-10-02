@@ -16,7 +16,7 @@ requires-python = ">=3.10"
 dependencies = [
   "numpy>=1.26",
   "requests==2.31.0",
-  "tomli>=2.4.1; python_version < '3.11'",
+  "scipy ; python_version < '3.14'",
   "pywin32>=312; sys_platform == 'win32'",
   "mlx>=0.32; sys_platform == 'darwin'",
 ]
@@ -71,25 +71,28 @@ def test_env_includes_python_and_dependencies(pyproject_file: Path):
         assert 'mlx' not in names
 
 
-@pytest.mark.parametrize("solver", ["classic", "libmamba", "rattler"])
+@pytest.mark.parametrize('python_version', [12, 13, 14])
+@pytest.mark.parametrize('solver', ['classic', 'libmamba', 'rattler'])
 def test_cli(
     conda_cli: CondaCLIFixture,
     tmp_envs_dir: Path,
     pyproject_file: Path,
+    python_version: int,
     solver: str,
 ):
     env_name = uuid4().hex[:8]
     prefix = tmp_envs_dir / env_name
 
     conda_args = (
-        'env',
         'create',
         '--name', env_name,
         '--file', str(pyproject_file),
         '--solver', solver,
+        '--yes',
+        f'python=3.{python_version}',
     )
     if solver == 'rattler':
-        conda_cli(*conda_args)
+        o = conda_cli(*conda_args)
     else:
         with pytest.warns(SolverWarning):
             conda_cli(*conda_args)
@@ -98,6 +101,10 @@ def test_cli(
     assert package_is_installed(prefix, 'numpy')
     assert package_is_installed(prefix, 'requests')
     assert package_is_installed(prefix, 'pytest')
+    if python_version >= 14 and solver == 'rattler':
+        assert not package_is_installed(prefix, 'scipy')
+    else:
+        assert package_is_installed(prefix, 'scipy')
     if sys.platform == 'win32':
         assert package_is_installed(prefix, 'pywin32')
     else:
