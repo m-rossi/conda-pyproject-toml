@@ -92,7 +92,7 @@ def test_cli(
         f'python=3.{python_version}',
     )
     if solver == 'rattler':
-        o = conda_cli(*conda_args)
+        conda_cli(*conda_args)
     else:
         with pytest.warns(SolverWarning):
             conda_cli(*conda_args)
