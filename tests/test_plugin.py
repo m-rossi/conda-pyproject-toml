@@ -1,13 +1,17 @@
 import sys
 from pathlib import Path
-from uuid import uuid4
 
 import pytest
-from conda.testing.fixtures import CondaCLIFixture
+from conda.base.context import context
+from conda.testing.fixtures import CondaCLIFixture, TmpEnvFixture
 from conda.testing.integration import package_is_installed
 
 from conda_pyproject_toml import PyProjectTomlSpec
 from conda_pyproject_toml.exceptions import SolverWarning
+
+pytestmark = [
+    pytest.mark.usefixtures('parametrized_solver_fixture'),
+]
 
 PYPROJECT_CONTENT = """
 [project]
@@ -72,44 +76,38 @@ def test_env_includes_python_and_dependencies(pyproject_file: Path):
 
 
 @pytest.mark.parametrize('python_version', [12, 13, 14])
-@pytest.mark.parametrize('solver', ['classic', 'libmamba', 'rattler'])
 def test_cli(
     conda_cli: CondaCLIFixture,
-    tmp_envs_dir: Path,
+    tmp_env: TmpEnvFixture,
     pyproject_file: Path,
     python_version: int,
-    solver: str,
 ):
-    env_name = uuid4().hex[:8]
-    prefix = tmp_envs_dir / env_name
-
-    conda_args = (
-        'create',
-        '--name', env_name,
-        '--file', str(pyproject_file),
-        '--solver', solver,
-        '--yes',
-        f'python=3.{python_version}',
-    )
-    if solver == 'rattler':
-        conda_cli(*conda_args)
-    else:
-        with pytest.warns(SolverWarning):
+    with tmp_env(f'python=3.{python_version}') as prefix:
+        conda_args = (
+            'install',
+            '--prefix', prefix,
+            '--file', str(pyproject_file),
+            '--yes',
+        )
+        if context.solver == 'rattler':
             conda_cli(*conda_args)
-    assert prefix.exists()
-    assert package_is_installed(prefix, 'python')
-    assert package_is_installed(prefix, 'numpy')
-    assert package_is_installed(prefix, 'requests')
-    assert package_is_installed(prefix, 'pytest')
-    if python_version >= 14 and solver == 'rattler':
-        assert not package_is_installed(prefix, 'scipy')
-    else:
-        assert package_is_installed(prefix, 'scipy')
-    if sys.platform == 'win32':
-        assert package_is_installed(prefix, 'pywin32')
-    else:
-        assert not package_is_installed(prefix, 'pywin32')
-    if sys.platform == 'darwin':
-        assert package_is_installed(prefix, 'mlx')
-    else:
-        assert not package_is_installed(prefix, 'mlx')
+        else:
+            with pytest.warns(SolverWarning):
+                conda_cli(*conda_args)
+        assert prefix.exists()
+        assert package_is_installed(prefix, 'python')
+        assert package_is_installed(prefix, 'numpy')
+        assert package_is_installed(prefix, 'requests')
+        assert package_is_installed(prefix, 'pytest')
+        if python_version >= 14 and context.solver == 'rattler':
+            assert not package_is_installed(prefix, 'scipy')
+        else:
+            assert package_is_installed(prefix, 'scipy')
+        if sys.platform == 'win32':
+            assert package_is_installed(prefix, 'pywin32')
+        else:
+            assert not package_is_installed(prefix, 'pywin32')
+        if sys.platform == 'darwin':
+            assert package_is_installed(prefix, 'mlx')
+        else:
+            assert not package_is_installed(prefix, 'mlx')
