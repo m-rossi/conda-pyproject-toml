@@ -47,6 +47,7 @@ test = [
 [project.urls]
 source = "https://github.com/m-rossi/conda-pyproject-toml"
 issues = "https://github.com/m-rossi/conda-pyproject-toml/issues"
+changelog = "https://github.com/m-rossi/conda-pyproject-toml/blob/main/CHANGELOG.md"
 
 [tool.coverage.run]
 omit = [
