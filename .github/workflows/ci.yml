@@ -29,9 +29,11 @@ jobs:
       - uses: conda-incubator/setup-miniconda@v4
         with:
           auto-update-conda: true
-          environment-file: environment.yml
+          channels: conda-forge
           miniforge-version: latest
           python-version: ${{ matrix.python-version }}
+      - run: conda install -n base --yes conda-pyproject-toml
+      - run: conda install --yes --file pyproject.toml
       - run: pip install --no-deps -e .
       - run: pytest .
       - uses: codecov/codecov-action@v7
