@@ -28,10 +28,12 @@ jobs:
       - uses: actions/checkout@v7
       - uses: conda-incubator/setup-miniconda@v4
         with:
+          activate-environment: ""
+          auto-activate: true
           auto-update-conda: true
           miniforge-version: latest
           python-version: ${{ matrix.python-version }}
-      - run: conda install -n base --yes conda-pyproject-toml
+      - run: conda install --yes conda-pyproject-toml
       - run: conda install --yes --file pyproject.toml
       - run: pip install --no-deps -e .
       - run: pytest .
