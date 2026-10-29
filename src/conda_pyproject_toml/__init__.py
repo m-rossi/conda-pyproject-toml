@@ -52,12 +52,12 @@ class PyProjectTomlSpec(EnvironmentSpecBase):
         if ';' in requirement:
             parts = requirement.split(';')
             if len(parts) != 2:
-                raise ValueError(f"Invalid requirement format: {requirement}")
+                raise ValueError(f'Invalid requirement format: {requirement}')
             requirement = parts[0].strip()
             environment = parts[1].strip()
             parts = re.split(r'(>=|<=|==|!=|>|<)', environment)
             if len(parts) != 3:
-                raise ValueError(f"Invalid environment marker format: {environment}")
+                raise ValueError(f'Invalid environment marker format: {environment}')
             marker = parts[0].strip()
             comparison = parts[1].strip()
             value = parts[2].strip().replace("'", "").replace('"', '')
@@ -79,7 +79,7 @@ class PyProjectTomlSpec(EnvironmentSpecBase):
                             category=SolverWarning,
                         )
                 case _:
-                    raise ValueError(f"Unsupported environment marker: {marker}")
+                    raise ValueError(f'Unsupported environment marker: {marker}')
         else:
             environment = ''
         requirement = solve_pkg_name(requirement, PYPI_CONFIG)
