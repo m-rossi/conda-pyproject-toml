@@ -75,7 +75,7 @@ def test_env_includes_python_and_dependencies(pyproject_file: Path):
         assert 'mlx' not in names
 
 
-@pytest.mark.parametrize('python_version', [12, 13, 14])
+@pytest.mark.parametrize('python_version', [12, 13, 14, 15])
 def test_cli(
     conda_cli: CondaCLIFixture,
     tmp_env: TmpEnvFixture,
