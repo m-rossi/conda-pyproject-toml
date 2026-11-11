@@ -12,7 +12,10 @@ from grayskull.base.track_packages import solve_pkg_name
 from grayskull.strategy.py_toml import get_all_toml_info
 from grayskull.strategy.pypi import PYPI_CONFIG
 
-from .exceptions import SolverWarning
+from .exceptions import SolverWarning, RepodataWarning
+
+
+extras_re = re.compile(r'\[.+\]')
 
 
 class PyProjectTomlSpec(EnvironmentSpecBase):
@@ -49,6 +52,7 @@ class PyProjectTomlSpec(EnvironmentSpecBase):
             The parsed MatchSpec object, or None if the requirement is not applicable.
         """
         requirement = requirement.strip()
+        brackets = []
         if ';' in requirement:
             parts = requirement.split(';')
             if len(parts) != 2:
@@ -63,12 +67,10 @@ class PyProjectTomlSpec(EnvironmentSpecBase):
             value = parts[2].strip().replace("'", "").replace('"', '')
             match marker:
                 case 'sys_platform':
-                    if value == sys.platform:
-                        environment = ''
-                    else:
+                    if value != sys.platform:
                         return None
                 case 'python_version':
-                    environment = f'[when=python{comparison}{value}]'
+                    brackets.append(f'when=python{comparison}{value}')
                     if solver != 'rattler':
                         warnings.warn(
                             'Environment marker regarding Python version for requirement '
@@ -80,10 +82,23 @@ class PyProjectTomlSpec(EnvironmentSpecBase):
                         )
                 case _:
                     raise ValueError(f'Unsupported environment marker: {marker}')
+        # detect extras like "setuptools-scm[toml]"
+        if (extras_match := extras_re.search(requirement)):
+            extras = extras_match.group(0)[1:-1]
+            brackets.append(f'extras={extras}')
+            warnings.warn(
+                f'Extras "{extras}" found for requirement "{requirement}". Defining and '
+                'installing these extras is part of the V3 repodata specification which is '
+                'currently in beta.',
+                category=RepodataWarning,
+            )
+            requirement = extras_re.sub('', requirement)
+        if len(brackets):
+            brackets = f'[{", ".join(brackets)}]'
         else:
-            environment = ''
+            brackets = ''
         requirement = solve_pkg_name(requirement, PYPI_CONFIG)
-        return MatchSpec(f'{requirement}{environment}')
+        return MatchSpec(f'{requirement}{brackets}')
 
     @property
     def env(self) -> Environment:
