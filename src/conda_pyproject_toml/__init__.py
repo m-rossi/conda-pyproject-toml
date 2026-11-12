@@ -93,7 +93,7 @@ class PyProjectTomlSpec(EnvironmentSpecBase):
                 category=RepodataWarning,
             )
             requirement = extras_re.sub('', requirement)
-        if len(brackets):
+        if len(brackets) > 0:
             brackets = f'[{", ".join(brackets)}]'
         else:
             brackets = ''
