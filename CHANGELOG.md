@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-11-12
+
+### Added
+
+* Add support for Python 3.15 (#9, #10)
+* Add support for extras in dependencies (#11, #12)
+
+### Changed
+
+* Install dependencies for testing by itself instead of `envrionment.yml` (#7, #8)
+* Testing improvements (#13, #14)
+
 ## [0.1.1] - 2026-10-07
 
 ### Added
@@ -24,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Initial release
 
-[Unreleased]: https://github.com/m-rossi/conda-pyproject-toml/compare/0.1.1...HEAD
+[Unreleased]: https://github.com/m-rossi/conda-pyproject-toml/compare/0.1.2...HEAD
+[0.1.2]: https://github.com/m-rossi/conda-pyproject-toml/compare/0.1.1...0.1.2
 [0.1.1]: https://github.com/m-rossi/conda-pyproject-toml/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/m-rossi/conda-pyproject-toml/releases/tag/0.1.0
