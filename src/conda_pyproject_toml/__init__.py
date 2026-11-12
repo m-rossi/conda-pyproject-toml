@@ -14,7 +14,6 @@ from grayskull.strategy.pypi import PYPI_CONFIG
 
 from .exceptions import RepodataWarning, SolverWarning
 
-
 extras_re = re.compile(r'\[.+\]')
 
 
