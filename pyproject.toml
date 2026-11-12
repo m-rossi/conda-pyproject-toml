@@ -63,7 +63,9 @@ source = "vcs"
 
 [tool.pytest]
 minversion = "9.0"
+pythonpath = ["src"]
 addopts = [
+  "--import-mode=importlib",
   "--cov=conda_pyproject_toml",
   "--cov-report=xml",
   "--junitxml=junit.xml",
