@@ -7,7 +7,7 @@ from conda.testing.fixtures import CondaCLIFixture, TmpEnvFixture
 from conda.testing.integration import package_is_installed
 
 from conda_pyproject_toml import PyProjectTomlSpec
-from conda_pyproject_toml.exceptions import SolverWarning
+from conda_pyproject_toml.exceptions import RepodataWarning, SolverWarning
 
 pytestmark = [
     pytest.mark.usefixtures('parametrized_solver_fixture'),
@@ -94,9 +94,10 @@ def test_cli(
             '--yes',
         )
         if context.solver == 'rattler':
-            conda_cli(*conda_args)
+            with pytest.warns(RepodataWarning):
+                conda_cli(*conda_args)
         else:
-            with pytest.warns(SolverWarning):
+            with pytest.warns((RepodataWarning, SolverWarning)):
                 conda_cli(*conda_args)
         assert prefix.exists()
         assert package_is_installed(prefix, 'python')
