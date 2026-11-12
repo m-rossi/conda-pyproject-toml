@@ -12,7 +12,7 @@ from grayskull.base.track_packages import solve_pkg_name
 from grayskull.strategy.py_toml import get_all_toml_info
 from grayskull.strategy.pypi import PYPI_CONFIG
 
-from .exceptions import SolverWarning, RepodataWarning
+from .exceptions import RepodataWarning, SolverWarning
 
 
 extras_re = re.compile(r'\[.+\]')
