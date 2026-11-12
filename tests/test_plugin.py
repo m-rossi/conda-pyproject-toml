@@ -23,6 +23,7 @@ dependencies = [
   "scipy ; python_version < '3.14'",
   "pywin32>=312; sys_platform == 'win32'",
   "mlx>=0.32; sys_platform == 'darwin'",
+  "setuptools-scm[coverage]",
 ]
 
 [project.optional-dependencies]
@@ -65,6 +66,9 @@ def test_env_includes_python_and_dependencies(pyproject_file: Path):
     assert 'numpy' in names
     assert 'requests' in names
     assert 'pytest' in names
+    assert 'setuptools-scm' in names
+    # uncomment once V3 repodata support for extras is stable
+    # assert 'pytest-cov' in names
     if sys.platform == 'win32':
         assert 'pywin32' in names
     else:
@@ -99,6 +103,9 @@ def test_cli(
         assert package_is_installed(prefix, 'numpy')
         assert package_is_installed(prefix, 'requests')
         assert package_is_installed(prefix, 'pytest')
+        assert package_is_installed(prefix, 'setuptools-scm')
+        # uncomment once V3 repodata support for extras is stable
+        # assert package_is_installed(prefix, 'pytest-cov')
         if python_version >= 14 and context.solver == 'rattler':
             assert not package_is_installed(prefix, 'scipy')
         else:
